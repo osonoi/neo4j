@@ -5,7 +5,8 @@ create (d:男性天皇 { name:'弘文天皇' })
 create (e:男性天皇 { name:'舒明天皇' })
 create (f:女性天皇 { name:'皇極天皇（斉明天皇）' })
 create (g:皇族 { name:'草壁皇子' })
-create (c:女性天皇 { name: '元明天皇' })
+create (h:女性天皇 { name: '元明天皇' })
+create (i:女性天皇 { name: '元正天皇' })
 
 MATCH (a:男性天皇),(b:女性天皇)
 WHERE a.name = '天武天皇' AND b.name = '持統天皇'
@@ -78,6 +79,18 @@ MATCH (a:女性天皇),(b:男性天皇)
 WHERE a.name = '元明天皇' AND b.name = '天智天皇'
 CREATE (a)-[:父]->(b)
 CREATE (b)-[:娘]->(a)
+
+//、元正天皇、草壁皇子,元明天皇
+MATCH (a:女性天皇),(b:皇族)
+WHERE a.name = '元正天皇' AND b.name = '草壁皇子'
+CREATE (a)-[:父]->(b)
+CREATE (b)-[:娘]->(a)
+
+MATCH (a:女性天皇),(b:女性天皇)
+WHERE a.name = '元正天皇' AND b.name = '元明天皇'
+CREATE (a)-[:母]->(b)
+CREATE (b)-[:娘]->(a)
+
 
 //全部表示
 MATCH p=()-[]->() RETURN p LIMIT 25;
