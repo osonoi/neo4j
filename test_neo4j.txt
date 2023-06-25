@@ -1,0 +1,88 @@
+create (a:男性天皇 { name:'天武天皇' })
+create (b:男性天皇 { name:'天智天皇' })
+create (c:女性天皇 { name: '持統天皇' })
+create (d:男性天皇 { name:'弘文天皇' })
+create (e:男性天皇 { name:'舒明天皇' })
+create (f:女性天皇 { name:'皇極天皇（斉明天皇）' })
+create (g:皇族 { name:'草壁皇子' })
+create (c:女性天皇 { name: '元明天皇' })
+
+MATCH (a:男性天皇),(b:女性天皇)
+WHERE a.name = '天武天皇' AND b.name = '持統天皇'
+CREATE (a)-[:妻]->(b)
+CREATE (b)-[:夫]->(a)
+
+MATCH (a:男性天皇),(b:男性天皇)
+WHERE a.name = '天武天皇' AND b.name = '天智天皇'
+CREATE (a)-[:兄]->(b)
+CREATE (b)-[:弟]->(a)
+
+MATCH (a:男性天皇),(b:女性天皇)
+WHERE a.name = '天智天皇' AND b.name = '持統天皇'
+CREATE (a)-[:娘]->(b)
+CREATE (b)-[:父]->(a)
+
+MATCH (a:男性天皇),(b:男性天皇)
+WHERE a.name = '天武天皇' AND b.name = '弘文天皇'
+CREATE (a)-[:滅ぼす]->(b)
+CREATE (b)-[:滅ぼされる]->(a)
+
+MATCH (a:男性天皇),(b:男性天皇)
+WHERE a.name = '天智天皇' AND b.name = '弘文天皇'
+CREATE (a)-[:息子]->(b)
+CREATE (b)-[:父]->(a)
+
+MATCH (a:男性天皇),(b:男性天皇)
+WHERE a.name = '舒明天皇' AND b.name = '天智天皇'
+CREATE (a)-[:息子]->(b)
+CREATE (b)-[:父]->(a)
+
+MATCH (a:男性天皇),(b:男性天皇)
+WHERE a.name = '舒明天皇' AND b.name = '天武天皇'
+CREATE (a)-[:息子]->(b)
+CREATE (b)-[:父]->(a)
+
+MATCH (a:男性天皇),(b:女性天皇)
+WHERE a.name = '舒明天皇' AND b.name = '皇極天皇（斉明天皇）'
+CREATE (a)-[:妻]->(b)
+CREATE (b)-[:夫]->(a)
+
+MATCH (a:男性天皇),(b:女性天皇)
+WHERE a.name = '天智天皇' AND b.name = '皇極天皇（斉明天皇）'
+CREATE (a)-[:母]->(b)
+CREATE (b)-[:息子]->(a)
+
+MATCH (a:男性天皇),(b:女性天皇)
+WHERE a.name = '天武天皇' AND b.name = '皇極天皇（斉明天皇）'
+CREATE (a)-[:母]->(b)
+CREATE (b)-[:息子]->(a)
+
+//天武天皇、持統天皇、草壁皇子'
+MATCH (a:男性天皇),(b:皇族)
+WHERE a.name = '天武天皇' AND b.name = '草壁皇子'
+CREATE (a)-[:息子]->(b)
+CREATE (b)-[:父]->(a)
+
+MATCH (a:女性天皇),(b:皇族)
+WHERE a.name = '持統天皇' AND b.name = '草壁皇子'
+CREATE (a)-[:息子]->(b)
+CREATE (b)-[:母]->(a)
+
+//、元明天皇、草壁皇子,天智天皇
+MATCH (a:女性天皇),(b:皇族)
+WHERE a.name = '元明天皇' AND b.name = '草壁皇子'
+CREATE (a)-[:夫]->(b)
+CREATE (b)-[:妻]->(a)
+
+MATCH (a:女性天皇),(b:男性天皇)
+WHERE a.name = '元明天皇' AND b.name = '天智天皇'
+CREATE (a)-[:父]->(b)
+CREATE (b)-[:娘]->(a)
+
+
+MATCH p=()-[]->() RETURN p LIMIT 25;
+
+//全てのノードの削除
+MATCH (n) DETACH DELETE n
+//特定のノードの削除
+MATCH(n) WHERE id(n)=1 DELETE n
