@@ -79,10 +79,12 @@ WHERE a.name = '元明天皇' AND b.name = '天智天皇'
 CREATE (a)-[:父]->(b)
 CREATE (b)-[:娘]->(a)
 
-
+//全部表示
 MATCH p=()-[]->() RETURN p LIMIT 25;
 
 //全てのノードの削除
 MATCH (n) DETACH DELETE n
 //特定のノードの削除
 MATCH(n) WHERE id(n)=1 DELETE n
+//特定リレーション削除
+MATCH(p:`女性天皇`{name:"元明天皇"})-[r:`夫`]->(m:`皇族`{name:"草壁皇子"}) DELETE r
